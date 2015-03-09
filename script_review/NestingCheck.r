@@ -1,30 +1,59 @@
-# NestingCheck.R
-# AUTHOR: BM
-# Last Updated: 2/24/15
+# ———————————————————————————————————
+# SCRIPT FILE: NestingCheck.R
+# ORIGINAL AUTHOR: BM
+# DATE CREATED: 2/??/15
+#
+# LAST UPDATED BY: AH
+# LAST UDPATED: 3/9/15
 # 
-# In files: The most recent student, teacher, and school files
-# Outfiles: will give vectors of student, teacher, and school id's that shouold be flagged in spss
-#  
-# Still need to change teacher filename.
-_____________________________________________________
-# load in data - change based on where data are stored
-# change working directory for your purposes
-student <- read.csv("~/Box Sync/Math Center Data Analysis/Math Center CMP 7 Y1 Study (Efficacy Study Practice Year)/Data Files/V1/f7.1.1.V2.S1.1_ComputeSES&SciRep_ConvertCSV.csv")
-teacher <- read.csv("~/Box Sync/Math Center Data Analysis/Math Center CMP 7 Y1 Study (Efficacy Study Practice Year)/Data Files/V1/f7.1.2.V2.S0.TEST.csv")
-school <- read.csv("~/Box Sync/Math Center Data Analysis/Math Center CMP 7 Y1 Study (Efficacy Study Practice Year)/Data Files/V1/f7.1.3.V2.S1.1_ConvertCSV.csv")
-mapping <- read.csv("~/Box Sync/Math Center Data Analysis/Math Center CMP 7 Y1 Study (Efficacy Study Practice Year)/Data Files/V1/schools_mapping.csv")
-View(stu_teach)
+# PURPOSE:
+# Identify students, teachers, and schools that aren't nested with an entity at a higher level
+# Output files will give vectors of student, teacher, and school id's that shouold be flagged in spss because they aren't nested
+#
+# INPUT FILES:
+# f7.1.1.V2.S1.1_ComputeSES&SciRep_ConvertCSV.csv
+# f7.1.2.V2.S0.TEST.csv
+# f7.1.3.V2.S1.1_ConvertCSV.csv
+# schools_mapping.csv
+#
+# OUTPUT FILES:
+# teachers_without_students.csv
+#
+# OTHER NOTES:
+# Input files should be the most recent student, teacher, and school files
+# Change working directory as needed in the setwd command  
+#_____________________________________________________
+
+setwd(".../mc-script-examples/script_review")
+
+# load input files
+student <- read.csv("f7.1.1.V2.S1.1_ComputeSES&SciRep_ConvertCSV.csv")
+teacher <- read.csv("f7.1.2.V2.S0.TEST.csv")
+school <- read.csv("f7.1.3.V2.S1.1_ConvertCSV.csv")
+mapping <- read.csv("schools_mapping.csv")
+
+# create file names for output files
+teacherOut <- "teachers_without_students.csv" #change this file name to match naming conventions
 
 # merge student and teacher files
 stu_teach <- merge(student, teacher, by = "IDTEA", all = TRUE)
-View(stu_teach)
 
-# identify all teachers who have no students (in remove_tea) 
-idtea <- as.data.frame(table(stu_teach$IDTEA)) # convert teacher ids and their freq's to dataframe
-colnames(idtea) <- c('TEAID', 'freq')
-remove_tea <- idtea[which(idtea$freq == 1), 'TEAID']
-remove_tea <- as.data.frame(remove_tea)
-remove_tea  # these teachers should be flagged in spss
+# identify all teachers who have no students; results printed to teacherOut file 
+idtea_freq <- aggregate (stu_teach$IDSTU, list(stu_teach$IDTEA), max)
+colnames(idtea_freq) <- c('TEAID', 'freq')
+remove_tea <- idtea_freq[which(is.na(idtea_freq$freq)), 'TEAID']
+
+if(length(remove_tea) == 0){
+  write("No teachers with student nesting issues", file=teacherOut)
+} else {
+  remove_tea <- as.data.frame(remove_tea)
+  write.table(remove_tea, file=teacherOut, sep=",")  
+}
+
+rm(remove_tea)
+rm(idtea_freq)
+
+###LINES BELOW WEREN'T MODIFIED###
 
 # identify all students who have no teachers, or who have repeat teachers
 idstu <- as.data.frame(table(stu_teach$IDSTU))
@@ -32,7 +61,6 @@ colnames(idstu) <- c('STUID', 'freq')
 remove_stu <- idstu[which(idstu$freq != 1), 'STUID']
 remove_stu <- as.data.frame(remove_stu)
 remove_stu  # these students should be flagged in spss
-
 
 # merge school and mapping files 
 newSchool <- merge(school, mapping, by.x = "IDSCH", by.y = "X__pID_School")
