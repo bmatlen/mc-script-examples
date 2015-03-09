@@ -1,4 +1,4 @@
-# Use this script to pulls school data from the NCES website and combine into a table 
+# Use this script to pull school data from the NCES website and combine into a table 
 # 
 # Files:
 #   nces.txt: a list of NCES school IDs 
@@ -23,13 +23,12 @@ nces_vars_arr <- as.array(nces_vars)
 vars <- apply(nces_vars_arr,1,function(x) strsplit(x[1],";")[[1]][1])
 vars <- c("NCESID", vars)
 patterns <- apply(nces_vars_arr,1,function(x) strsplit(x[1],";")[[1]][2])
+var_cnt <- length(vars)
 
 # for each NCES school ID, read in webpage, scrape data, add to matrix
-var_cnt <- length(vars)
 schools <- vector("character", length=nces_cnt)
 nces_data <- matrix(,nrow=nces_cnt, ncol = var_cnt)
 colnames(nces_data) <- vars
-
 
 for (i in 1:nces_cnt){
   con <- url(nces_links[i], "r")
