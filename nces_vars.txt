@@ -1,0 +1,14 @@
+Locale;Locale:(?:.*?>){4}?(.*?)<
+Type;Type:(?:.*?>){2}?(.*?)<
+Charter;Charter:(?:.*?>){4}?(.*?)<
+Magnet;Magnet:(?:.*?>){4}?(.*?)<
+Teachers;Total Teachers \(FTE\):(?:.*?>){4}?(.*?)<
+Students;Total Students:(?:.*?>){4}?(.*?)<
+STRatio;Student\/Teacher Ratio:(?:.*?>){4}?(.*?)<
+Grades;Grade Levels:(?:.*?>){1}?(.*?)<
+American_Indian;American Indian\/Alaska Native:(?:.*?>){5}?(.*?)<
+Asian;Asian\/Pacific Islander\*:(?:.*?>){5}?(.*?)<
+Hispanic;Hispanic:(?:.*?>){5}?(.*?)<
+Black;Black, non-Hispanic:(?:.*?>){5}?(.*?)<
+White;White, non-Hispanic:(?:.*?>){5}?(.*?)<
+Multi;Two or More Races:(?:.*?>){5}?(.*?)<
