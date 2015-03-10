@@ -17,7 +17,7 @@
 * getting_started.spv
 *
 * OTHER NOTES:
-* When using this script template, be sure to update the working directory in the setwed command
+* When using this script template, be sure to update the working directory in the CD command
 * If any special packages were used, mention them here
 *----------------------------------------------------------.
 
