@@ -10,7 +10,13 @@ A style guide for MC scripts
 | nces.txt     | a sample list of NCES school IDs to use with nces.R |
 | nces_vars.txt | a sample of NCES variables and regular expressions to use with nces.R |
 
-###SPSS
+###Script Templates
 |File|Description|
 |-----|---|
-|Syntax1.sps|{under development}|
+|spss_template.sps|{under development}|
+|r_template.R|{under development}|
+
+###script_review
+|File|Description|
+|-----|---|
+|NestingCheck.r|suggested revisions to check if participants are properly nested in Y1 data|
